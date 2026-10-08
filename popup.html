@@ -15,8 +15,23 @@
         <p id="countdown" class="countdown">--</p>
       </section>
 
-      <label for="intervalInput">Reload interval (seconds)</label>
-      <input id="intervalInput" type="number" min="5" step="1" value="30">
+      <label for="intervalValue">Reload interval</label>
+      <div class="interval-row">
+        <input id="intervalValue" type="number" min="5" step="1" value="30">
+        <select id="intervalUnit" aria-label="Interval unit">
+          <option value="1" selected>seconds</option>
+          <option value="60">minutes</option>
+          <option value="3600">hours</option>
+        </select>
+      </div>
+
+      <div id="presets" class="presets">
+        <button type="button" class="chip" data-seconds="30">30s</button>
+        <button type="button" class="chip" data-seconds="300">5m</button>
+        <button type="button" class="chip" data-seconds="900">15m</button>
+        <button type="button" class="chip" data-seconds="1800">30m</button>
+        <button type="button" class="chip" data-seconds="3600">1h</button>
+      </div>
 
       <div class="actions">
         <button id="startBtn">Start</button>

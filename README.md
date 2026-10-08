@@ -2,17 +2,20 @@
 
 A Chromium (Manifest V3) extension that reloads the current tab at a configurable
 fixed interval. Published on the Edge Add-ons store as extension ID
-`adkjlkaeicnimgfgmaneicmblnkidceg`, version 1.0.0. The same sources run unmodified in
-Google Chrome — see *Chrome compatibility* below.
+`adkjlkaeicnimgfgmaneicmblnkidceg`. The same sources run unmodified in Google Chrome —
+see *Chrome compatibility* below.
 
 ## Features
 
 - Per-tab auto reload — each tab has its own interval and runs independently.
+- Interval entered as a number plus a unit (seconds, minutes or hours), so an hourly
+  reload is `1 hour` rather than `3600`. Quick presets cover 30s / 5m / 15m / 30m / 1h.
 - Minimum interval of 5 seconds, enforced in both the popup and the service worker.
 - Live countdown in the popup, plus a toolbar badge showing the time until the next
-  reload (seconds below 60, then rounded-up minutes as `Nm`, capped at `999+`).
+  reload (seconds below 60, then `Nm`, then `Nh`, capped at `99h+`).
 - State survives browser restarts via `chrome.storage.local` and `chrome.alarms`.
 - Automatic cleanup: closing a tab clears its alarm and stored settings.
+
 
 ## Project layout
 
@@ -82,7 +85,7 @@ requirements Chrome imposes.
 From the repository root:
 
 ```bash
-zip -r ../tab-auto-reload-1.0.0.zip manifest.json background.js popup.html popup.js popup.css
+zip -r ../tab-auto-reload-1.0.1.zip manifest.json background.js popup.html popup.js popup.css
 ```
 
 Bump `version` in `manifest.json` for each submission.
@@ -114,6 +117,22 @@ and `key`. For reference, the published build's `key` is:
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApFIQCkEwkoY/JNNDt3pIx+IMzC5BZY/TCa6xKbEfH461/d6Y3nPUb7mxTO+3wvH1Tuf96ExYvXi80C5hWSberbVHM6BY9ubYqGMrV7tVYtls6ictFBefGCuO58yhfGw2kKUPaSDlc2A81wg8BKcF36i8krkjmlMPBjSwdZx9uhm9QJYWGp6SjLa13cf18xLdHEJ7IGsw0XaqdZLxInzZwRAdeNJQfeJlV4efKmp7OgTR0XE3gJ5nV6BKS8yL16ihgYFzL2CJ+jMijyMAplS3m/mMZD0Z6CnsYhVXt40Ho5NpANU57YSy39EoS906wLTVbPWy3gsadFXOPd+Z2t6fXwIDAQAB
 ```
 
+## Changes in 1.0.1
+
+Interval entry and badge formatting only — scheduling, storage and the message
+contract between the popup and the service worker are unchanged, and settings stored
+by 1.0.0 continue to work (intervals are still persisted in seconds).
+
+- The seconds-only number field became a number plus a unit selector, with quick
+  presets. An interval of 3600 now reads as `1 hour`.
+- Reopening the popup shows a stored interval in its largest exact unit: 300 seconds
+  comes back as `5 minutes`, not `300 seconds`.
+- The countdown and status text are humanised (`1h 02m 05s`, `reload every 5m`).
+- The toolbar badge gains an hours form, so long intervals stay short: `2h` rather
+  than `120m`.
+- Fixed: a validation or confirmation message was erased roughly a second later by the
+  popup's background refresh. Explicit messages are now held briefly.
+
 ## Provenance of this repository
 
 The original sources were lost. `background.js`, `popup.html`, `popup.js` and
@@ -123,6 +142,9 @@ identical to the published 1.0.0 bundle. `manifest.json` was reconstructed from 
 installed manifest with the store-injected `update_url` and `key` fields removed; it is
 semantically identical to the published manifest, though the original file's formatting
 is not recoverable.
+
+The verified 1.0.0 bytes remain available at the `v1.0.0` tag; later tags carry the
+changes listed above.
 
 ## License
 

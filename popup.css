@@ -57,14 +57,55 @@ label {
   font-size: 13px;
 }
 
-input {
-  width: 100%;
+.interval-row {
+  display: flex;
+  gap: 8px;
+}
+
+input,
+select {
   box-sizing: border-box;
   padding: 8px;
   border: 1px solid #b8c2d1;
   border-radius: 8px;
   font-size: 14px;
+  font-family: inherit;
   background: #fff;
+  color: inherit;
+}
+
+input {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+}
+
+select {
+  flex: 0 0 auto;
+  cursor: pointer;
+}
+
+.presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.chip {
+  flex: 0 0 auto;
+  padding: 5px 10px;
+  border: 1px solid #c8d3e3;
+  border-radius: 999px;
+  background: #fff;
+  color: #30405a;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.chip:hover {
+  background: #e8eef7;
+  filter: none;
 }
 
 .actions {

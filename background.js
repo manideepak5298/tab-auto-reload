@@ -27,11 +27,16 @@ function formatBadgeText(remainingSeconds) {
   }
 
   const minutes = Math.ceil(remainingSeconds / 60);
-  if (minutes > 999) {
-    return "999+";
+  if (minutes < 60) {
+    return `${minutes}m`;
   }
 
-  return `${minutes}m`;
+  const hours = Math.ceil(minutes / 60);
+  if (hours > 99) {
+    return "99h+";
+  }
+
+  return `${hours}h`;
 }
 
 async function setBadge(tabId, text) {
