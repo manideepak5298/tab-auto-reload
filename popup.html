@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tab Auto Reload</title>
+    <link rel="stylesheet" href="popup.css">
+  </head>
+  <body>
+    <main class="panel">
+      <h1>Tab Auto Reload</h1>
+
+      <section id="stateCard" class="state-card stopped">
+        <p id="stateLabel" class="state-label">Stopped</p>
+        <p id="countdown" class="countdown">--</p>
+      </section>
+
+      <label for="intervalInput">Reload interval (seconds)</label>
+      <input id="intervalInput" type="number" min="5" step="1" value="30">
+
+      <div class="actions">
+        <button id="startBtn">Start</button>
+        <button id="stopBtn" class="secondary">Stop</button>
+      </div>
+
+      <p id="status" class="status"></p>
+    </main>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

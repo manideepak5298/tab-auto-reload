@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "Tab Auto Reload",
+  "version": "1.0.0",
+  "description": "Reload the current tab at a configurable fixed interval.",
+  "permissions": ["tabs", "alarms", "storage"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Tab Auto Reload"
+  }
+}

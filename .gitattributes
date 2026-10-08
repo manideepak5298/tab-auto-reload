@@ -1,0 +1,4 @@
+# The extension sources are byte-for-byte identical to the published store build and
+# verify against its signed treehash hashes. Disable all line-ending conversion so a
+# clone on any platform reproduces those exact bytes.
+* -text
