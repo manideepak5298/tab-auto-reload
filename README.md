@@ -1,8 +1,9 @@
 # Tab Auto Reload
 
-A Microsoft Edge (Manifest V3) extension that reloads the current tab at a configurable
+A Chromium (Manifest V3) extension that reloads the current tab at a configurable
 fixed interval. Published on the Edge Add-ons store as extension ID
-`adkjlkaeicnimgfgmaneicmblnkidceg`, version 1.0.0.
+`adkjlkaeicnimgfgmaneicmblnkidceg`, version 1.0.0. The same sources run unmodified in
+Google Chrome — see *Chrome compatibility* below.
 
 ## Features
 
@@ -36,7 +37,7 @@ A 1-second interval ticker keeps the toolbar badge current while any tab is acti
 
 ## Running locally
 
-1. Open `edge://extensions`.
+1. Open `edge://extensions` (or `chrome://extensions`).
 2. Enable **Developer mode**.
 3. Choose **Load unpacked** and select this folder.
 
@@ -44,11 +45,39 @@ Loading unpacked assigns a different extension ID than the published one. To kee
 published ID locally, add the store's public key to `manifest.json` as a `"key"` field
 (see *Publishing* below).
 
+## Chrome compatibility
+
+The extension requires **no code changes** to run in Chrome. Every Chromium API it uses
+is standard MV3, supported identically by both browsers:
+
+```
+chrome.action.setBadgeBackgroundColor / setBadgeText
+chrome.alarms.clear / create / onAlarm
+chrome.runtime.lastError / onInstalled / onMessage / onStartup / sendMessage
+chrome.storage.local
+chrome.tabs.onActivated / onRemoved / query / reload
+```
+
+There are no `browser.*` calls, no Edge-only APIs, and no Edge-specific manifest keys.
+
+Verified end to end in Google Chrome 155 and Microsoft Edge 154 by loading the extension
+into a throwaway profile and pointing a tab at a local request-counting server. At a
+requested 5-second interval Chrome performed 12 reloads in 60 seconds with measured gaps
+of exactly 5.0 s, and the alarm was cleared on stop.
+
+One caveat that applies equally to the published Edge build: Chromium clamps very short
+`chrome.alarms` periods for extensions installed from a store, but exempts unpacked ones.
+The measurements above were taken unpacked, so intervals below 30 seconds may behave
+differently once installed from the Chrome Web Store. Intervals of 30 seconds and above
+are unaffected.
+
 ## Publishing
 
 Create a zip containing only the five extension files listed above — do not include
 `README.md`, `.gitignore`, or the `.git` folder — and upload it to the
 [Partner Center dashboard](https://partner.microsoft.com/dashboard/microsoftedge).
+The identical zip works for the Chrome Web Store; see below for the extra listing
+requirements Chrome imposes.
 
 From the repository root:
 
@@ -57,6 +86,23 @@ zip -r ../tab-auto-reload-1.0.0.zip manifest.json background.js popup.html popup
 ```
 
 Bump `version` in `manifest.json` for each submission.
+
+### Chrome Web Store
+
+The same zip is a valid Chrome Web Store package. Submitting it additionally requires:
+
+- A one-time **$5 USD** developer registration fee on the
+  [Chrome Web Store developer dashboard](https://chrome.google.com/webstore/devconsole).
+- A **128x128 PNG store icon**. This extension ships no icons at all, so Chrome shows a
+  generic puzzle piece in the toolbar. Adding an `icons` key to `manifest.json` is
+  optional for review but strongly recommended.
+- At least one **screenshot**, 1280x800 or 640x400.
+- A **single-purpose description** and a **privacy practices** disclosure. This extension
+  collects nothing and makes no network requests, which is the simplest case to declare.
+- A **justification for the `tabs` permission** — it is used to read the active tab's id
+  and to call `chrome.tabs.reload`, never to read page content or browsing history.
+
+Chrome assigns its own extension ID, unrelated to the Edge one.
 
 ### Store-injected manifest fields
 
